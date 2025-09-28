@@ -1,0 +1,137 @@
+ 3432<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotating Text</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        #rotatingText {
+            font-size: 2.5em;
+            text-align: center;
+            color: #333;
+        }
+
+        #content-wrapper {
+            flex: 1 1 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            max-height: 75vh; /* Prevent content from overflowing too far */
+            overflow: auto;
+        }
+
+        .button-container {
+            width: 100%;
+            text-align: center;
+            padding: 200px 0;
+        }
+
+        .button {
+            padding: 12px 24px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 6px;
+            background-color: #fff;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.1s ease;
+        }
+
+        .button:active {
+            box-shadow: 4px 4px 6px #666;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+<body>
+    <div id="content-wrapper">
+        <div id="rotatingText"></div>
+    </div>
+
+    <div class="button-container">
+        <button class="button" onclick="chooseRandomContent()">Need Extra?</button>
+    </div>
+
+
+    <script>
+        const content = [
+            { type: "text", value: "I love the way that you sit in the car and how cool you look" },
+            { type: "text", value: "I love how good of a cook you are" },
+            { type: "text", value: "I love how passionate you are for glass" },
+            { type: "text", value: "I love getting to sit down and end the days watching shows with you" },
+            { type: "text", value: "I love when I get to fall asleep next to you" },
+            { type: "text", value: "I love getting to wake up next to you" },
+            { type: "youtube", value: "https://www.youtube.com/embed/cQtYHYSJkbE?si=l6s2xj8-qeVZA29e", caption: "'You're as beautiful now as I thought you were then'"},
+            { type: "youtube", value: "https://www.youtube.com/embed/n3bcIH-qWoI?si=H2O5d2GEigiziRP7", caption: "Always makes me think of driving home from blowing with you"},
+            { type: "youtube", value: "https://www.youtube.com/embed/nPQ3gdmv2eg?si=hJ8bz-lYjRWi7xZc", caption: "This reminds me of Iceland, and how when I was there I just wanted to come back to you"},
+            { type: "youtube", value: "https://www.youtube.com/embed/lgFie0xGiFI?si=h-asxYXJfy7EMnRz", caption: "I remember driving around Iceland listening to this song and thinking of you"},
+            { type: "youtube", value: "https://www.youtube.com/embed/5RKgmVpkKgU?si=TznulAFucpPJGPLN", caption: "'Barely on my mind all the fucking time'"},
+            { type: "youtube", value: "https://www.youtube.com/embed/RLmxxfyKhrQ?si=bv0Q5jGL1iN0kwps", caption: "'You turn me on to the idea of growing old'"},
+            { type: "youtube", value: "https://www.youtube.com/embed/e5VYgtc-Ut4?si=vGzH6ykwONAdcJcq", caption: "This was the first Ezra song we listened to together, I love that we share it"},
+            { type: "youtube", value: "https://www.youtube.com/embed/K0OSfbPJFa4?si=gjZguHaiHKuPm7ho", caption: "Every time I see one of these it always makes me think of you"}
+        ];
+
+        function getRandomIntInclusive(min, max) {
+            min = Math.ceil(min); 
+            max = Math.floor(max); 
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        let lastIndex = -1;
+
+        function chooseRandomContent() {
+            let randomIndex;
+
+            do {
+                randomIndex = getRandomIntInclusive(0, content.length - 1);
+            } while (randomIndex === lastIndex && content.length > 1);
+
+            lastIndex = randomIndex;
+            const selected = content[randomIndex];
+
+            const display = document.getElementById('rotatingText');
+            display.innerHTML = ""; // Clear old content
+
+            if (selected.type === "text") {
+                display.textContent = selected.value;
+
+            } else if (selected.type === "youtube") {
+                const iframe = document.createElement("iframe");
+                iframe.src = selected.value;
+                iframe.width = "100%";
+                iframe.height = "215";
+                iframe.frameBorder = "0";
+                iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+                iframe.allowFullscreen = true;
+                display.appendChild(iframe);
+
+                if (selected.caption) {
+                    const caption = document.createElement("p");
+                    caption.textContent = selected.caption;
+                    caption.style.marginTop = "10px";
+                    caption.style.fontSize = "1em";
+                    caption.style.color = "#444";
+                    display.appendChild(caption);
+                }
+            }
+        }
+
+        chooseRandomContent();
+    </script>
+</body>
+</html>
